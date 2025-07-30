@@ -6,5 +6,5 @@
       ios_banner:
         banner: login
         text: |
-          Welcome to {{ inventory_hostname }}
+          Welcome to {{ inventory_hostname }} Your home on the web!
         state: present
