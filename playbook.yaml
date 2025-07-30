@@ -1,0 +1,10 @@
+- name: Configure Cisco Devices with Banner
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Set login banner
+      ios_banner:
+        banner: login
+        text: |
+          Welcome to {{ inventory_hostname }}
+        state: present
