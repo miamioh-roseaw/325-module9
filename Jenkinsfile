@@ -2,55 +2,47 @@ pipeline {
   agent any
 
   environment {
-    INVENTORY = 'hosts'
-    PLAYBOOK = 'playbook.yaml'
-    ANSIBLE_CONFIG = 'ansible.cfg'
-    VAULT_VARS = 'vault_vars.yaml'
+    VAULT_PASSWORD_FILE = '.vault_pass.txt'
   }
 
   stages {
-    stage('Install Ansible and Vault Tools') {
+
+    stage('Checkout') {
+      steps {
+        echo '[INFO] Checking out repository...'
+        checkout scm
+      }
+    }
+
+    stage('Install Ansible') {
       steps {
         sh '''
+          echo "[INFO] Installing pip3 if not present..."
           if ! command -v pip3 > /dev/null; then
-            echo "[INFO] pip3 not found. Installing..."
-            wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py
-            python3 get-pip.py --user
+              wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py
+              python3 get-pip.py --user
           fi
 
-          if ! command -v ansible-playbook > /dev/null; then
-            echo "[INFO] Installing Ansible..."
-            pip3 install --user ansible
-          fi
+          echo "[INFO] Uninstalling old Ansible..."
+          pip3 uninstall -y ansible ansible-core || true
+
+          echo "[INFO] Installing Ansible 2.10.7..."
+          pip3 install --user ansible==2.10.7
         '''
       }
     }
 
     stage('Run Ansible Playbook with Vault') {
-      environment {
-        VAULT_PASS = credentials('ansible-vault-password')
-      }
       steps {
+        echo '[INFO] Running Ansible Playbook with Ansible Vault decryption...'
         sh '''
-          echo "[INFO] Running playbook with Ansible Vault decryption..."
-          
-          # Save password to file (temporary use only)
-          echo "$VAULT_PASS" > .vault_pass.txt
-
-          ansible-playbook $PLAYBOOK -i $INVENTORY \
-            --vault-password-file .vault_pass.txt \
-            -e @$VAULT_VARS
-
-          # Clean up
-          rm -f .vault_pass.txt
+          export PATH=$HOME/.local/bin:$PATH
+          ansible-playbook playbook.yaml \
+            -i hosts \
+            --vault-password-file ${VAULT_PASSWORD_FILE} \
+            -e @vault_vars.yaml
         '''
       }
-    }
-  }
-
-  post {
-    always {
-      echo '[INFO] Pipeline completed.'
     }
   }
 }
