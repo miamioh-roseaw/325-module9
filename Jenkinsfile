@@ -3,6 +3,7 @@ pipeline {
 
   environment {
     VAULT_PASSWORD_FILE = '.vault_pass.txt'
+    ANSIBLE_SSH_EXECUTABLE = 'ssh'
   }
 
   stages {
