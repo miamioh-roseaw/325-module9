@@ -2,9 +2,9 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Set login banner
+    - name: Set incoming banner
       ios_banner:
-        banner: login
+        banner: incoming
         text: |
           Welcome to {{ inventory_hostname }} Your home on the web!
         state: present
