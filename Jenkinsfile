@@ -8,13 +8,6 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
-      steps {
-        echo '[INFO] Checking out repository...'
-        checkout scm
-      }
-    }
-
     stage('Install Ansible') {
       steps {
         sh '''
