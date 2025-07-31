@@ -4,7 +4,7 @@ pipeline {
     environment {
         ANSIBLE_INVENTORY = 'inventory.ini'
         PLAYBOOK_FILE = 'install_chrome.yml'
-        VAULT_PASS = credentials('ansible-vault-pass') // Jenkins Secret Text credential
+        VAULT_PASS = credentials('ansible-vault-password') // Jenkins Secret Text credential
     }
 
     stages {
