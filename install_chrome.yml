@@ -1,26 +1,24 @@
----
 - name: Install Google Chrome on Linux and Windows
-  hosts: all
-  gather_facts: yes
+  hosts: chrome_targets
+  become: yes
   vars_files:
     - vault_vars.yml
-
   tasks:
-    - name: Install Chrome on Debian-based Linux
-      when: ansible_facts['os_family'] == "Debian"
-      become: yes
+    - name: Install Chrome on Linux
+      when: ansible_os_family == "Debian"
       apt:
-        deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        deb: "{{ chrome_url_linux }}"
         state: present
 
-    - name: Install Chocolatey on Windows
-      when: ansible_facts['os_family'] == "Windows"
-      win_chocolatey:
-        name: chocolatey
-        state: present
+    - name: Download Chrome installer on Windows
+      when: ansible_os_family == "Windows"
+      win_get_url:
+        url: "{{ chrome_url_windows }}"
+        dest: C:\\Users\\Public\\chrome_installer.exe
 
     - name: Install Chrome on Windows
-      when: ansible_facts['os_family'] == "Windows"
-      win_chocolatey:
-        name: googlechrome
+      when: ansible_os_family == "Windows"
+      win_package:
+        path: C:\\Users\\Public\\chrome_installer.exe
         state: present
+        arguments: "/silent /install"
