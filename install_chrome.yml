@@ -1,6 +1,9 @@
 - name: Install Google Chrome on Linux and Windows
   hosts: chrome_targets
   become: yes
+  vars:
+    chrome_url_linux: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    chrome_url_windows: "https://dl.google.com/chrome/install/latest/chrome_installer.exe"
   vars_files:
     - vault_vars.yml
   tasks:
