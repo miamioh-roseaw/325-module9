@@ -23,11 +23,11 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'ansible-vault-password', variable: 'VAULT_PASS')]) {
                     sh '''
-                        echo "$VAULT_PASS" > vault_pass.txt
-                        chmod 600 vault_pass.txt
+                        echo "$VAULT_PASS" > vault_vars.yml
+                        chmod 600 vault_pass.yml
 
                         echo "[INFO] Running Ansible playbook..."
-                        ansible-playbook $PLAYBOOK -i $INVENTORY --vault-password-file vault_pass.txt
+                        ansible-playbook $PLAYBOOK -i $INVENTORY --vault-password-file vault_vars.yml
                     '''
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
 
     post {
         always {
-            sh 'rm -f vault_pass.txt'
+            sh 'rm -f vault_vars.yml'
         }
         success {
             echo "✅ Chrome installation completed successfully."
