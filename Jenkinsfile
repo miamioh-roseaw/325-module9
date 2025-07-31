@@ -32,7 +32,7 @@ pipeline {
     post {
         always {
             echo '[INFO] Cleaning up vault file...'
-            sh 'rm -f vault_pass.txt'
+            // sh 'rm -f vault_pass.txt'
         }
         success {
             echo '[✅] Chrome installed successfully on all hosts.'
