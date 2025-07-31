@@ -6,6 +6,16 @@ pipeline {
   }
 
   stages {
+    stage('Precheck System Dependencies') {
+      steps {
+        sh '''
+          echo "[INFO] Verifying Python and pip..."
+          which python3 || sudo apt install -y python3
+          which pip || sudo apt install -y python3-pip
+        '''
+      }
+    }
+
     stage('Setup Python Virtualenv') {
       steps {
         sh '''
@@ -15,9 +25,10 @@ pipeline {
           echo "[INFO] Creating virtualenv for Ansible..."
           python3 -m virtualenv ansible-env
 
-          echo "[INFO] Activating virtualenv and installing Ansible..."
+          echo "[INFO] Activating virtualenv and installing Ansible and collections..."
           . ansible-env/bin/activate && \
-            pip install ansible==6.7.0
+            pip install ansible==6.7.0 && \
+            ansible-galaxy collection install ansible.windows community.general
         '''
       }
     }
@@ -30,7 +41,7 @@ pipeline {
 
           echo "[INFO] Running Ansible playbook..."
           . ansible-env/bin/activate && \
-            ansible-playbook install_chrome.yml -i inventory.ini --vault-password-file vault_pass.txt
+            ansible-playbook install_chrome.yml -i inventory.ini --vault-password-file vault_pass.txt -vvv
         '''
       }
     }
