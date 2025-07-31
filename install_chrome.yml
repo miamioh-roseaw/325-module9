@@ -12,6 +12,8 @@
       apt:
         deb: "{{ chrome_url_linux }}"
         state: present
+        update_cache: yes
+        force: yes
 
     - name: Download Chrome installer on Windows
       when: ansible_os_family == "Windows"
