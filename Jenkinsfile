@@ -16,6 +16,18 @@ pipeline {
       }
     }
 
+ stages {
+    stage('Diagnostics') {
+      steps {
+        sh '''
+          echo "[INFO] Checking workspace contents..."
+          ls -lah
+          echo "[INFO] Showing inventory file..."
+          cat inventory.ini
+        '''
+      }
+    }
+   
     stage('Setup Python Virtualenv') {
       steps {
         sh '''
