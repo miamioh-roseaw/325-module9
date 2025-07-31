@@ -2,34 +2,44 @@ pipeline {
     agent any
 
     environment {
+        SCRIPT = 'install_chrome.yml'
         INVENTORY = 'inventory.ini'
-        PLAYBOOK = 'install_chrome.yml'
-        VAULT_FILE = 'vault_vars.yml'
+        VAULT_PASS = credentials('ansible-vault-pass') // Jenkins secret text with vault password
     }
 
     stages {
-        stage('Install Ansible if Needed') {
+        stage('Setup Ansible Environment') {
             steps {
                 sh '''
-                    if ! command -v ansible > /dev/null; then
-                        echo "[INFO] Installing Ansible..."
-                        sudo apt-get update && sudo apt-get install -y ansible
-                    fi
+                    echo "[INFO] Cleaning existing Ansible installations (if any)..."
+                    pip3 uninstall -y ansible ansible-core || true
+                    rm -rf ~/.local/lib/python3.10/site-packages/ansible*
+
+                    echo "[INFO] Installing Ansible..."
+                    pip3 install --user ansible==2.14
+
+                    echo "[INFO] Verifying Ansible version..."
+                    ~/.local/bin/ansible-playbook --version
                 '''
             }
         }
 
-        stage('Install Chrome via Ansible Playbook') {
+        stage('Create Vault Password File') {
             steps {
-                withCredentials([string(credentialsId: 'ansible-vault-password', variable: 'VAULT_PASS')]) {
-                    sh '''
-                        echo "$VAULT_PASS" > vault_pass.txt
-                        chmod 600 vault_pass.txt
+                sh '''
+                    echo "[INFO] Writing vault password to vault_pass.txt..."
+                    echo "${VAULT_PASS}" > vault_pass.txt
+                    chmod 600 vault_pass.txt
+                '''
+            }
+        }
 
-                        echo "[INFO] Running Ansible playbook..."
-                        ansible-playbook $PLAYBOOK -i $INVENTORY --vault-password-file vault_pass.txt
-                    '''
-                }
+        stage('Run Ansible Playbook') {
+            steps {
+                sh '''
+                    echo "[INFO] Running Ansible playbook..."
+                    ~/.local/bin/ansible-playbook ${SCRIPT} -i ${INVENTORY} --vault-password-file vault_pass.txt
+                '''
             }
         }
     }
@@ -37,12 +47,13 @@ pipeline {
     post {
         always {
             sh 'rm -f vault_pass.txt'
-        }
-        success {
-            echo "✅ Chrome installation completed successfully."
+            echo "[INFO] Cleanup complete."
         }
         failure {
-            echo "❌ Chrome installation failed."
+            echo "[ERROR] Jenkins pipeline failed."
+        }
+        success {
+            echo "[SUCCESS] Ansible playbook ran successfully."
         }
     }
 }
