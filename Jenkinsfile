@@ -24,7 +24,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'ansible-vault-password', variable: 'VAULT_PASS')]) {
                     sh '''
                         echo "$VAULT_PASS" > vault_vars.yml
-                        chmod 600 vault_pass.yml
+                        chmod 600 vault_vars.yml
 
                         echo "[INFO] Running Ansible playbook..."
                         ansible-playbook $PLAYBOOK -i $INVENTORY --vault-password-file vault_vars.yml
