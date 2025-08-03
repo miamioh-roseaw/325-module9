@@ -1,29 +1,25 @@
-- name: Install Google Chrome on Linux and Windows
-  hosts: chrome_targets
+- name: Install Neofetch on Linux and Windows
+  hosts: automation_targets
   become: yes
-  vars:
-    chrome_url_linux: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-    chrome_url_windows: "https://dl.google.com/chrome/install/latest/chrome_installer.exe"
   vars_files:
     - vault_vars.yml
+
   tasks:
-    - name: Install Chrome on Linux
+    - name: Install Neofetch on Linux (Debian-based)
       when: ansible_os_family == "Debian"
       apt:
-        deb: "{{ chrome_url_linux }}"
+        name: neofetch
         state: present
         update_cache: yes
-        force: yes
 
-    - name: Download Chrome installer on Windows
+    - name: Ensure Chocolatey is installed on Windows
       when: ansible_os_family == "Windows"
-      win_get_url:
-        url: "{{ chrome_url_windows }}"
-        dest: C:\\Users\\Public\\chrome_installer.exe
-
-    - name: Install Chrome on Windows
-      when: ansible_os_family == "Windows"
-      win_package:
-        path: C:\\Users\\Public\\chrome_installer.exe
+      win_chocolatey:
+        name: chocolatey
         state: present
-        arguments: "/silent /install"
+
+    - name: Install Neofetch on Windows using Chocolatey
+      when: ansible_os_family == "Windows"
+      win_chocolatey:
+        name: neofetch
+        state: present
