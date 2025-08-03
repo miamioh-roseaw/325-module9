@@ -46,16 +46,16 @@ pipeline {
       }
     }
 
-    stage('Run Chrome Installation Playbook') {
+    stage('Run NeoFetch Installation Playbook') {
       steps {
         sh '''
           echo "[INFO] Creating Ansible vault password file..."
           echo "${VAULT_PASSWORD}" > vault_pass.txt
           chmod 600 vault_pass.txt
 
-          echo "[INFO] Running Ansible playbook to install Chrome..."
+          echo "[INFO] Running Ansible playbook to install NeoFetch..."
           . ansible-env/bin/activate && \
-            ansible-playbook install_chrome.yml -i ./inventory.ini --vault-password-file vault_pass.txt -vvv
+            ansible-playbook install_neo.yml -i ./inventory.ini --vault-password-file vault_pass.txt -vvv
         '''
       }
     }
