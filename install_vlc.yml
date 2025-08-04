@@ -1,7 +1,6 @@
 ---
 - name: Install VLC on Linux and Windows
   hosts: automation_targets
-  become: yes
   vars_files:
     - vault_vars.yml
 
@@ -11,6 +10,7 @@
       apt:
         name: vlc
         state: present
+        become: yes
         update_cache: yes
 
     - name: Ensure Chocolatey is installed on Windows
