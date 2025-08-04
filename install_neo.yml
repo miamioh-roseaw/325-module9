@@ -1,12 +1,12 @@
 - name: Install Neofetch on Linux and Windows
   hosts: automation_targets
-  become: yes
   vars_files:
     - vault_vars.yml
 
   tasks:
     - name: Install Neofetch on Linux (Debian-based)
       when: ansible_os_family == "Debian"
+      become: true
       apt:
         name: neofetch
         state: present
