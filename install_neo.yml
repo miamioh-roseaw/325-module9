@@ -1,14 +1,14 @@
-- name: Install Neofetch on Linux and Windows
+- name: Install Chrome on Linux and Windows
   hosts: automation_targets
   vars_files:
     - vault_vars.yml
 
   tasks:
-    - name: Install Neofetch on Linux (Debian-based)
+    - name: Install Chrome on Linux (Debian-based)
       when: ansible_os_family == "Debian"
       become: true
       apt:
-        name: neofetch
+        name: chrome
         state: present
         update_cache: yes
 
@@ -18,8 +18,8 @@
         name: chocolatey
         state: present
 
-    - name: Install Neofetch on Windows using Chocolatey
+    - name: Install Chrome on Windows using Chocolatey
       when: ansible_os_family == "Windows"
       win_chocolatey:
-        name: neofetch
+        name: chrome
         state: present
