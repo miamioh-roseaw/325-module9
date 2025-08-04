@@ -1,25 +1,30 @@
 ---
-- name: Install VLC on Linux and Windows
+- name: Install Geany on Linux and Windows
   hosts: automation_targets
-  vars_files:
-    - vault_vars.yml
+  gather_facts: yes
 
   tasks:
-    - name: Install VLC on Debian-based Linux
+    # ----- Linux Section -----
+    - name: Install Geany on Debian/Ubuntu Linux
       when: ansible_os_family == "Debian"
+      become: true
       apt:
-        name: vlc
+        name: geany
         state: present
-        become: yes
         update_cache: yes
 
+    # ----- Windows Section -----
     - name: Ensure Chocolatey is installed on Windows
       when: ansible_os_family == "Windows"
-      win_chocolatey:
-        state: present
+      win_shell: |
+        if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));
+        }
 
-    - name: Install VLC on Windows
+    - name: Install Geany on Windows using Chocolatey
       when: ansible_os_family == "Windows"
       win_chocolatey:
-        name: vlc
+        name: geany
         state: present
