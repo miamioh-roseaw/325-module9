@@ -1,25 +1,25 @@
-- name: Install Chrome on Linux and Windows
+---
+- name: Install VLC on Linux and Windows
   hosts: automation_targets
+  become: yes
   vars_files:
     - vault_vars.yml
 
   tasks:
-    - name: Install Chrome on Linux (Debian-based)
+    - name: Install VLC on Debian-based Linux
       when: ansible_os_family == "Debian"
-      become: true
       apt:
-        deb: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+        name: vlc
         state: present
         update_cache: yes
 
     - name: Ensure Chocolatey is installed on Windows
       when: ansible_os_family == "Windows"
       win_chocolatey:
-        name: chocolatey
         state: present
 
-    - name: Install Chrome on Windows using Chocolatey
+    - name: Install VLC on Windows
       when: ansible_os_family == "Windows"
       win_chocolatey:
-        name: googlechrome
+        name: vlc
         state: present
