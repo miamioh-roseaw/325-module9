@@ -40,7 +40,7 @@ pipeline {
           
           echo "[INFO] Installing Ansible and required collections..."
           . ansible-env/bin/activate && \
-            pip install ansible==6.7.0 && \
+            pip install ansible==6.7.0 && pywinrm && \
             ansible-galaxy collection install ansible.windows community.general
         '''
       }
