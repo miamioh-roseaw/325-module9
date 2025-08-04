@@ -27,7 +27,7 @@ pipeline {
       steps {
         sh '''
           . ansible-env/bin/activate && \
-          ansible-playbook install_vlc.yml \
+          ansible-playbook install_cross_platform.yml \
             -i inventory.ini \
             --vault-password-file vault_pass.txt
         '''
