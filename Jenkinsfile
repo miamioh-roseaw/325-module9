@@ -27,7 +27,7 @@ pipeline {
       steps {
         sh '''
           . ansible-env/bin/activate && \
-          ansible-playbook install_neo.yml \
+          ansible-playbook install_chrome.yml \
             -i inventory.ini \
             --vault-password-file vault_pass.txt
         '''
