@@ -9,9 +9,10 @@ pipeline {
     stage('Setup Python Virtualenv') {
       steps {
         sh '''
-          python3 -m virtualenv ansible-env
+          python3 -m venv ansible-env
           . ansible-env/bin/activate && \
-            sudo pip install ansible pywinrm && \
+            pip install --upgrade pip && \
+            pip install ansible pywinrm && \
             ansible-galaxy collection install ansible.windows community.windows
         '''
       }
@@ -32,6 +33,18 @@ pipeline {
             --vault-password-file vault_pass.txt
         '''
       }
+    }
+
+    stage('Cleanup Vault Password') {
+      steps {
+        sh 'rm -f vault_pass.txt'
+      }
+    }
+  }
+
+  post {
+    always {
+      sh 'rm -rf ansible-env vault_pass.txt'
     }
   }
 }
