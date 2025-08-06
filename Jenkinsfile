@@ -34,11 +34,4 @@ pipeline {
       }
     }
   }
-
-  post {
-    always {
-      echo '[INFO] Cleaning up...'
-      sh 'rm -f vault_pass.txt'
-    }
-  }
 }
