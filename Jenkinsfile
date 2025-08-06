@@ -11,7 +11,7 @@ pipeline {
         sh '''
           python3 -m virtualenv ansible-env
           . ansible-env/bin/activate && \
-            pip install ansible==6.7.0 pywinrm && \
+            sudo pip install ansible==6.7.0 pywinrm && \
             ansible-galaxy collection install ansible.windows community.windows
         '''
       }
