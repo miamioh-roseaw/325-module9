@@ -1,11 +1,4 @@
-linux_user: student
-linux_pass: Passw0rd!
-
-windows_user: student
-windows_pass: Passw0rd!
-
-cisco_user: student
-cisco_pass: Passw0rd!
-
+ansible_user=student
+ansible_password=Passw0rd!
 ansible_become_user=root
 ansible_become_password=Passw0rd!
