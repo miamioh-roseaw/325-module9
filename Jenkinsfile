@@ -11,7 +11,7 @@ pipeline {
         sh '''
             echo "[INFO] Installing python3.10-venv..."
             sudo apt-get update
-            sudo apt-get install -y python3.10-venv python3.10-ensurepip
+            sudo apt-get install -y python3.10-venv python3-pip
         '''
       }
     }
