@@ -2,10 +2,24 @@ pipeline {
   agent any
 
   environment {
-    ANSIBLE_VAULT_PASS = credentials('ansible-vault-password') // Jenkins secret text credential
+    ANSIBLE_VAULT_PASS = credentials('ansible-vault-password') // Jenkins Secret Text
   }
 
   stages {
+    stage('Ensure python3-venv Installed') {
+      steps {
+        sh '''
+          if ! python3 -m venv --help > /dev/null 2>&1; then
+            echo "[INFO] Installing python3.10-venv..."
+            sudo apt-get update
+            sudo apt-get install -y python3.10-venv
+          else
+            echo "[INFO] python3.10-venv already installed."
+          fi
+        '''
+      }
+    }
+
     stage('Setup Python Virtualenv') {
       steps {
         sh '''
@@ -35,7 +49,7 @@ pipeline {
       }
     }
 
-    stage('Cleanup Vault Password') {
+    stage('Cleanup Vault Password File') {
       steps {
         sh 'rm -f vault_pass.txt'
       }
