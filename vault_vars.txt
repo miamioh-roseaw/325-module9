@@ -1,7 +1,11 @@
+[linux]
 ansible_user: student
 ansible_password: Passw0rd!
 ansible_become_user: root
 ansible_become_password: Passw0rd!
+[windows]
+ansible_user: student
+ansible_password: Passw0rd!
 ansible_connection: winrm
 ansible_winrm_transport: basic
 ansible_winrm_server_cert_validation: ignore
