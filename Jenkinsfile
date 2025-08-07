@@ -2,13 +2,14 @@ pipeline {
   agent any
 
   environment {
-    ANSIBLE_VAULT_PASS = credentials('ansible-vault-password') // Jenkins secret
+    ANSIBLE_VAULT_PASS = credentials('ansible-vault-password') // Jenkins Secret Text
   }
 
   stages {
     stage('Setup Environment') {
       steps {
         sh '''
+          set -e
           sudo apt-get update
           sudo apt-get install -y python3.10-venv python3-pip
           python3 -m venv ansible-env
@@ -29,6 +30,7 @@ pipeline {
     stage('Run Playbook') {
       steps {
         sh '''
+          set -e
           . ansible-env/bin/activate && \
           ansible-playbook install_cross_platform.yml \
             -i inventory.ini \
@@ -37,16 +39,16 @@ pipeline {
       }
     }
 
-    stage('Cleanup') {
+    stage('Cleanup Vault File') {
       steps {
-        sh 'rm -f vault_pass.txt'
+        sh 'shred -u vault_pass.txt || rm -f vault_pass.txt'
       }
     }
   }
 
   post {
     always {
-      sh 'rm -rf ansible-env vault_pass.txt'
+      sh 'rm -rf ansible-env'
     }
   }
 }
