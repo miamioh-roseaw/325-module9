@@ -2,7 +2,17 @@
 - name: Install Geany on Linux and Windows
   hosts: automation_targets
   gather_facts: yes
-  vars_files: vault_vars.yml
+  
+  pre_tasks:
+    - name: Load correct connection vars based on platform
+      set_fact:
+        ansible_user: "{{ linux_vars.ansible_user if ansible_os_family != 'Windows' else windows_vars.ansible_user }}"
+        ansible_password: "{{ linux_vars.ansible_password if ansible_os_family != 'Windows' else windows_vars.ansible_password }}"
+        ansible_connection: "{{ linux_vars.ansible_connection if ansible_os_family != 'Windows' else windows_vars.ansible_connection }}"
+        ansible_become_user: "{{ linux_vars.ansible_become_user if ansible_os_family != 'Windows' else omit }}"
+        ansible_become_password: "{{ linux_vars.ansible_become_password if ansible_os_family != 'Windows' else omit }}"
+        ansible_winrm_transport: "{{ windows_vars.ansible_winrm_transport if ansible_os_family == 'Windows' else omit }}"
+        ansible_winrm_server_cert_validation: "{{ windows_vars.ansible_winrm_server_cert_validation if ansible_os_family == 'Windows' else omit }}"
 
   tasks:
     # ----- Linux Section -----
