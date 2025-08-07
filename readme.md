@@ -3,10 +3,10 @@
 *    sudo apt install openssh-server
     
 **2) set up winrm on Windows workstations (Run-As Administator on Windows PowerShell):**
-    winrm quickconfig -force
-    Set-Item -Path WSMan:\localhost\Service\Auth\Basic -Value $true
-    Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value $true
-    Enable-NetFirewallRule -Name "WINRM-HTTP-In-TCP"
+*    winrm quickconfig -force
+*    Set-Item -Path WSMan:\localhost\Service\Auth\Basic -Value $true
+*    Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value $true
+*    Enable-NetFirewallRule -Name "WINRM-HTTP-In-TCP"
     
 **3) Create the vault_vars.yaml file Create a file named vault_vars.yaml with your Ansible variables from the variables in vault_vars.txt.**
 
