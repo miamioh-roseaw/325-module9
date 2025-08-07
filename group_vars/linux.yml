@@ -1,0 +1,8 @@
+ansible_user: "{{ linux_vars.ansible_user }}"
+ansible_password: "{{ linux_vars.ansible_password }}"
+ansible_become_user: "{{ linux_vars.ansible_become_user }}"
+ansible_become_password: "{{ linux_vars.ansible_become_password }}"
+ansible_connection: ssh
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+ansible_become: true
+ansible_become_method: sudo
