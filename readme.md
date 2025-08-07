@@ -1,4 +1,4 @@
-#1) Set up ssh on linux workstations:
+*1) Set up ssh on linux workstations:*
     sudo apt update
     sudo apt install openssh-server
     
