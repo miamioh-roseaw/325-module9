@@ -9,6 +9,7 @@
 *    Enable-NetFirewallRule -Name "WINRM-HTTP-In-TCP"
     
 **3) Create the windows.yml and linux.yml files in group_vars by copying the windows.txt to windows.yml and by copying the linux.txt to linux.yml**
+cp windows.txt windows.yml
 
 **4)Encrypt the files using Ansible Vault (you will need to install ansible-core in terminal on your jenkins-server using 'sudo apt install ansible-core' On the command line, run:**
     ansible-vault encrypt linux.yaml
