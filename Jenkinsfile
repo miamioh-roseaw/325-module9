@@ -27,16 +27,7 @@ pipeline {
         writeFile file: 'vault_pass.txt', text: "${ANSIBLE_VAULT_PASS}"
       }
     }
-    stage('Pre-Check Linux SSH') {
-      steps {
-        sh '''
-          . ansible-env/bin/activate && \
-          ansible linux -i inventory.ini -m ping \
-            --vault-password-file vault_pass.txt \
-            -e "@vault_vars.yml"
-        '''
-      }
-    }
+    
     stage('Run Playbook') {
       steps {
         sh '''
