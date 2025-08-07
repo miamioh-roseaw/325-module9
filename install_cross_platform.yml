@@ -1,21 +1,8 @@
----
 - name: Install Geany on Linux and Windows
   hosts: automation_targets
   gather_facts: yes
-  
-  pre_tasks:
-    - name: Load correct connection vars based on platform
-      set_fact:
-        ansible_user: "{{ linux_vars.ansible_user if ansible_os_family != 'Windows' else windows_vars.ansible_user }}"
-        ansible_password: "{{ linux_vars.ansible_password if ansible_os_family != 'Windows' else windows_vars.ansible_password }}"
-        ansible_connection: "{{ linux_vars.ansible_connection if ansible_os_family != 'Windows' else windows_vars.ansible_connection }}"
-        ansible_become_user: "{{ linux_vars.ansible_become_user if ansible_os_family != 'Windows' else omit }}"
-        ansible_become_password: "{{ linux_vars.ansible_become_password if ansible_os_family != 'Windows' else omit }}"
-        ansible_winrm_transport: "{{ windows_vars.ansible_winrm_transport if ansible_os_family == 'Windows' else omit }}"
-        ansible_winrm_server_cert_validation: "{{ windows_vars.ansible_winrm_server_cert_validation if ansible_os_family == 'Windows' else omit }}"
 
   tasks:
-    # ----- Linux Section -----
     - name: Install Geany on Debian/Ubuntu Linux
       when: ansible_os_family == "Debian"
       become: true
@@ -24,7 +11,6 @@
         state: present
         update_cache: yes
 
-    # ----- Windows Section -----
     - name: Ensure Chocolatey is installed on Windows
       when: ansible_os_family == "Windows"
       win_shell: |
