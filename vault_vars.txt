@@ -3,6 +3,8 @@ ansible_user: student
 ansible_password: Passw0rd!
 ansible_become_user: root
 ansible_become_password: Passw0rd!
+ansible_connection: ssh
+
 [windows]
 ansible_user: student
 ansible_password: Passw0rd!
