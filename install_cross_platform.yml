@@ -13,14 +13,18 @@
         state: present
         update_cache: yes
 
-    - name: Ensure Chocolatey is installed on Windows
+    - name: Check if Chocolatey is installed
       when: ansible_os_family == "Windows"
+      win_command: choco -v
+      register: choco_check
+      ignore_errors: yes
+
+    - name: Install Chocolatey if not present
+      when: ansible_os_family == "Windows" and choco_check.rc != 0
       win_shell: |
-        if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));
-        }
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
     - name: Install Geany on Windows using Chocolatey
       when: ansible_os_family == "Windows"
