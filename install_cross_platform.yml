@@ -2,6 +2,7 @@
 - name: Install Geany on Linux and Windows
   hosts: automation_targets
   gather_facts: yes
+  vars_files: vault_vars.yml
 
   tasks:
     # ----- Linux Section -----
