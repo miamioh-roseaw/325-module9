@@ -8,9 +8,7 @@
     Set-Item -Path WSMan:\localhost\Service\AllowUnencrypted -Value $true
     Enable-NetFirewallRule -Name "WINRM-HTTP-In-TCP"
     
-#3) Create the vault_vars.yaml file Create a file named vault_vars.yaml with your Ansible variables like this:
-    ansible_user: student
-    ansible_password: Passw0rd!
+#3) Create the vault_vars.yaml file Create a file named vault_vars.yaml with your Ansible variables from the variables in vault_vars.txt.
 
 #4)Encrypt the file using Ansible Vault (you will need to install ansible-core in terminal on your jenkins-server using 'sudo apt install ansible-core' On the command line, run:
     ansible-vault encrypt vault_vars.yaml
