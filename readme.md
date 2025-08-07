@@ -1,6 +1,6 @@
 **1) Set up ssh on linux workstations:**
-#    sudo apt update
-#    sudo apt install openssh-server
+*    sudo apt update
+*    sudo apt install openssh-server
     
 **2) set up winrm on Windows workstations (Run-As Administator on Windows PowerShell):**
     winrm quickconfig -force
