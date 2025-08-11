@@ -3,14 +3,13 @@
   gather_facts: yes
 
   tasks: 
-  
 
     - name: Install Geany on Debian/Ubuntu Linux
       when: ansible_os_family == "Debian"
       become: true
       apt:
         name: geany
-        state: absent
+        state: present
         update_cache: yes
 
     - name: Install Chocolatey if not present
@@ -24,4 +23,4 @@
       when: ansible_os_family == "Windows"
       win_chocolatey:
         name: geany
-        state: absent
+        state: present
