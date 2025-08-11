@@ -10,7 +10,7 @@
       become: true
       apt:
         name: geany
-        state: present
+        state: absent
         update_cache: yes
 
     - name: Install Chocolatey if not present
@@ -24,4 +24,4 @@
       when: ansible_os_family == "Windows"
       win_chocolatey:
         name: geany
-        state: present
+        state: absent
