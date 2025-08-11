@@ -10,19 +10,18 @@
         name: geany
         state: present
         update_cache: yes
+        
+    - name: Uninstall Chocolatey
+      when: ansible_os_family == "Windows"
+      win_chocolatey:
+        name: chocolatey
+        state: absent
 
     - name: Check if Chocolatey is installed
       when: ansible_os_family == "Windows"
       win_command: choco -v
       register: choco_check
       ignore_errors: yes
-
-    
-    - name: Uninstall Chocolatey
-      when: ansible_os_family == "Windows"
-      win_chocolatey:
-        name: chocolatey
-        state: absent
 
     - name: Install Chocolatey if not present
       when: ansible_os_family == "Windows" and choco_check.rc != 0
