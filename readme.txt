@@ -12,7 +12,7 @@
     cp windows.txt windows.yml
     cp linux.txt linux.yml
 
-4)Encrypt the files using Ansible Vault (you will need to install ansible-core in terminal on your jenkins-server using 'sudo apt install ansible-core' On the command line, run:**
+4)Encrypt the files using Ansible Vault (you will need to install ansible-core in terminal on your jenkins-server using 'sudo apt install ansible-core' On the command line, run:
     ansible-vault encrypt linux.yaml
     ansible-vault encrypt windows.yaml
 
