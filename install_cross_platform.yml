@@ -17,6 +17,13 @@
       register: choco_check
       ignore_errors: yes
 
+    
+    - name: Uninstall Chocolatey
+      when: ansible_os_family == "Windows"
+      win_chocolatey:
+        name: chocolatey
+        state: absent
+
     - name: Install Chocolatey if not present
       when: ansible_os_family == "Windows" and choco_check.rc != 0
       win_shell: |
