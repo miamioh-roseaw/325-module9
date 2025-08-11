@@ -2,7 +2,14 @@
   hosts: automation_targets
   gather_facts: yes
 
-  tasks:
+  tasks: 
+  
+    - name: Uninstall Chocolatey
+      when: ansible_os_family == "Windows"
+      win_chocolatey:
+        name: chocolatey
+        state: absent
+
     - name: Install Geany on Debian/Ubuntu Linux
       when: ansible_os_family == "Debian"
       become: true
@@ -10,12 +17,6 @@
         name: geany
         state: present
         update_cache: yes
-        
-    - name: Uninstall Chocolatey
-      when: ansible_os_family == "Windows"
-      win_chocolatey:
-        name: chocolatey
-        state: absent
 
     - name: Install Chocolatey if not present
       when: ansible_os_family == "Windows" 
